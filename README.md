@@ -15,7 +15,7 @@ An app where citizens can report illegally parked vehicles so authorities can ve
 
 In order to run this project please follow these steps:
 
-### 1. Install Docker/CokerDesktop :
+### 1. Install Docker and/or DokerDesktop :
 
 - [Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
 - [Linux](https://docs.docker.com/desktop/setup/install/linux/)
