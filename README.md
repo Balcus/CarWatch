@@ -20,11 +20,9 @@ In order to run this project please follow these steps:
 <a href="https://docs.docker.com/desktop/setup/install/windows-install/">
   <img alt="Windows" width="50px" style="padding-right:100px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/windows8/windows8-original.svg"/>
 </a>
-<br>
 <a href="https://docs.docker.com/desktop/setup/install/linux/">
   <img alt="Linux" width="50px" style="padding-right:100px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/linux/linux-original.svg"/>
 </a>
-<br>
 <a href="https://docs.docker.com/desktop/setup/install/mac-install/">
   <img alt="MacOS" width="50px" style="padding-right:100px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/apple/apple-original.svg"/>
 </a>
