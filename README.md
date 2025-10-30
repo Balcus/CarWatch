@@ -18,13 +18,13 @@ In order to run this project please follow these steps:
 ### 1. Install Docker and/or DokerDesktop :
 
 <a href="https://docs.docker.com/desktop/setup/install/windows-install/">
-  <img alt="Windows" width="50px" style="padding-right:10px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/windows8/windows8-original.svg"/>
+  <img alt="Windows" width="50px" style="padding-right:30px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/windows8/windows8-original.svg"/>
 </a>
 <a href="https://docs.docker.com/desktop/setup/install/linux/">
-  <img alt="Linux" width="50px" style="padding-right:10px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/linux/linux-original.svg"/>
+  <img alt="Linux" width="50px" style="padding-right:30px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/linux/linux-original.svg"/>
 </a>
 <a href="https://docs.docker.com/desktop/setup/install/mac-install/">
-  <img alt="MacOS" width="50px" style="padding-right:10px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/apple/apple-original.svg"/>
+  <img alt="MacOS" width="50px" style="padding-right:30px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/apple/apple-original.svg"/>
 </a>
 
 <br>
