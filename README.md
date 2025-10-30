@@ -8,15 +8,18 @@ An app where citizens can report illegally parked vehicles so authorities can ve
 <img align="left" alt="Dotnet" width="50px" style="padding-right:10px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/react/react-original.svg"/>
 <img align="left" alt="Dotnet" width="50px" style="padding-right:10px;" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/postgresql/postgresql-original.svg"/>
 
+<br>
+<br>
+
 ## Run instructions
 
 In order to run this project please follow these steps:
 
 ### 1. Install Docker/CokerDesktop :
 
-[Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
-[Linux](https://docs.docker.com/desktop/setup/install/linux/)
-[MacOS](https://docs.docker.com/desktop/setup/install/mac-install/)
+- [Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
+- [Linux](https://docs.docker.com/desktop/setup/install/linux/)
+- [MacOS](https://docs.docker.com/desktop/setup/install/mac-install/)
 
 ### 2. Install .NET SDK 9
 
