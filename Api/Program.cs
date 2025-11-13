@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<DatabaseContext>("appdb");
 builder.Services.AddOpenApi();
