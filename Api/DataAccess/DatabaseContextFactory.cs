@@ -8,7 +8,7 @@ namespace Api.DataAccess
         public DatabaseContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
-            optionsBuilder.UseNpgsql("");
+            optionsBuilder.UseNpgsql("Host=localhost;Database=dummy");
             return new DatabaseContext(optionsBuilder.Options);
         }
     }
