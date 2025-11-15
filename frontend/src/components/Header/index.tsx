@@ -1,29 +1,42 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./Header.css";
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import "./Header.css";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <header className="header">
-      <h2 className="logo">🚘 Car Watch</h2>
+      {/* Logo */}
+      <Button className="logo-btn" onClick={() => navigate("/")}>
+        🚘 CAR WATCH
+      </Button>
 
       <div className="navRow">
+        {/* Left Navigation */}
         <nav className="navLeft">
-          <Button variant="text">Te</Button>
-          <Button variant="contained">Contained</Button>
-          <Button variant="outlined">Outlined</Button>
+          <Button className="nav-btn" onClick={() => navigate("/")}>
+            Home
+          </Button>
+          <Button className="nav-btn" onClick={() => navigate("/map")}>
+            Map
+          </Button>
+          <Button className="nav-btn" onClick={() => navigate("/report")}>
+            Report
+          </Button>
         </nav>
 
+        {/* Right Navigation */}
         <div className="rightSection">
-          <span className="navRight">🚗</span>
-          <Button variant="contained" onClick={() => navigate("/register")}>
+          <Button
+            className="register-btn"
+            onClick={() => navigate("/register")}
+          >
             Register
           </Button>
 
-          <Button variant="contained" onClick={() => navigate("/login")}>
+          <Button className="login-btn" onClick={() => navigate("/login")}>
             Login
           </Button>
         </div>

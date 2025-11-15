@@ -1,5 +1,15 @@
 import { useState, FC } from "react";
-import { Box, TextField, Button, Typography, Paper } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import "./Login.css";
 
 const Login: FC = () => {
@@ -8,32 +18,26 @@ const Login: FC = () => {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
 
-  const validateEmail = (email: string) => {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return pattern.test(email);
-  };
+  const validateEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const validate = () => {
     let valid = true;
     const newErrors = { email: "", password: "" };
 
-    if (!form.email) {
-      newErrors.email = "Email is required";
-      valid = false;
-    } else if (!validateEmail(form.email)) {
+    if (!form.email || !validateEmail(form.email)) {
       newErrors.email = "Invalid email format";
       valid = false;
     }
 
-    if (!form.password) {
-      newErrors.password = "Password is required";
-      valid = false;
-    } else if (form.password.length < 6) {
+    if (!form.password || form.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
       valid = false;
     }
@@ -50,6 +54,7 @@ const Login: FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
+
     console.log("Login data:", form);
   };
 
@@ -57,7 +62,7 @@ const Login: FC = () => {
     <Box className="login-page">
       <Paper elevation={4} className="login-card">
         <Typography variant="h4" className="login-title">
-          Welcome Back
+          Welcome
         </Typography>
 
         <Typography variant="subtitle1" className="login-subtitle">
@@ -77,10 +82,11 @@ const Login: FC = () => {
             helperText={errors.email}
           />
 
+          {/* PASSWORD FIELD WITH TOGGLE 👇 */}
           <TextField
             label="Password"
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             required
             fullWidth
             margin="normal"
@@ -88,6 +94,18 @@ const Login: FC = () => {
             onChange={handleChange}
             error={Boolean(errors.password)}
             helperText={errors.password}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label="toggle password visibility"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           <Button

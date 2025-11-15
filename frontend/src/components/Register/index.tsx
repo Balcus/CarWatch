@@ -1,41 +1,66 @@
 import { FC, useState } from "react";
-import { Box, TextField, Button, Typography, Paper } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 import "./Register.css";
 
 export const Register: FC = () => {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    cnp: "",
     password: "",
     confirmPassword: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [errors, setErrors] = useState({
     name: "",
     email: "",
+    cnp: "",
     password: "",
     confirmPassword: "",
   });
 
-  const validateEmail = (email: string) => {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return pattern.test(email);
-  };
+  const validateEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const validate = () => {
     let valid = true;
-    const newErrors = { name: "", email: "", password: "", confirmPassword: "" };
+    const newErrors = {
+      name: "",
+      email: "",
+      cnp: "",
+      password: "",
+      confirmPassword: "",
+    };
 
     if (!form.name.trim()) {
       newErrors.name = "Name is required";
       valid = false;
     }
 
-    if (!form.email) {
-      newErrors.email = "Email is required";
-      valid = false;
-    } else if (!validateEmail(form.email)) {
+    if (!form.email || !validateEmail(form.email)) {
       newErrors.email = "Invalid email format";
+      valid = false;
+    }
+
+    if (!form.cnp) {
+      newErrors.cnp = "CNP is required";
+      valid = false;
+    } else if (!/^\d{13}$/.test(form.cnp)) {
+      newErrors.cnp = "CNP must contain exactly 13 digits";
       valid = false;
     }
 
@@ -47,10 +72,7 @@ export const Register: FC = () => {
       valid = false;
     }
 
-    if (!form.confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password";
-      valid = false;
-    } else if (form.confirmPassword !== form.password) {
+    if (form.confirmPassword !== form.password) {
       newErrors.confirmPassword = "Passwords do not match";
       valid = false;
     }
@@ -60,13 +82,22 @@ export const Register: FC = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
+    const { name, value } = e.target;
+
+    // 🔥 Restricție numerică strictă pentru CNP
+    if (name === "cnp") {
+      if (/^\d*$/.test(value) && value.length <= 13) {
+        setForm({ ...form, cnp: value });
+      }
+      return;
+    }
+
+    setForm({ ...form, [name]: value });
+    setErrors({ ...errors, [name]: "" });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!validate()) return;
 
     console.log("Register data:", form);
@@ -103,28 +134,62 @@ export const Register: FC = () => {
             helperText={errors.email}
           />
 
+          {/* 🔥 CNP FIELD */}
+          <TextField
+            label="CNP"
+            name="cnp"
+            fullWidth
+            margin="normal"
+            value={form.cnp}
+            onChange={handleChange}
+            error={Boolean(errors.cnp)}
+            helperText={errors.cnp}
+            inputProps={{ maxLength: 13 }}
+          />
+
+          {/* PASSWORD FIELD */}
           <TextField
             label="Password"
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             fullWidth
             margin="normal"
             value={form.password}
             onChange={handleChange}
             error={Boolean(errors.password)}
             helperText={errors.password}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           <TextField
             label="Confirm Password"
             name="confirmPassword"
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             fullWidth
             margin="normal"
             value={form.confirmPassword}
             onChange={handleChange}
             error={Boolean(errors.confirmPassword)}
             helperText={errors.confirmPassword}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           <Button
@@ -140,3 +205,5 @@ export const Register: FC = () => {
     </Box>
   );
 };
+
+export default Register;
