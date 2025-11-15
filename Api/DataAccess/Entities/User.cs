@@ -23,6 +23,7 @@ public class User : IEntityBase<int>
 
     public Role Role { get; set; } = Role.Default;
     
-
+    
     public List<Report> Reports { get; set; } = new();
+    
 }

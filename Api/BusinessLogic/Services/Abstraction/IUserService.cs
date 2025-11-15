@@ -1,0 +1,10 @@
+using Api.BusinessLogic.Dto;
+
+namespace Api.BusinessLogic.Services.Abstraction;
+
+public interface IUserService
+{
+    Task<int> CreateUser(UserDto userDto);
+
+    Task<List<UserDtoResponse>> GetUsers();
+}

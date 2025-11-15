@@ -1,4 +1,8 @@
+using Api.BusinessLogic.Services.Abstraction;
+using Api.BusinessLogic.Services.Implementation;
 using Api.DataAccess;
+using Api.DataAccess.Abstractions;
+using Api.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,9 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<DatabaseContext>("appdb");
+builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<IRepository<User, int>, BaseRepository<User, int>>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -23,5 +31,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.MapControllers();
+//app.UseHttpsRedirection();
 app.Run();
