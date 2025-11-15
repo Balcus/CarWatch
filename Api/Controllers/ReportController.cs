@@ -26,9 +26,18 @@ public class ReportController : Controller
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateAsync([FromBody] ReportDto entity)
+    public async Task<IActionResult> CreateAsync([FromForm] string reportJson, [FromForm] IFormFile image)
     {
-        var id = await _reportService.CreateAsync(entity);
+        if (string.IsNullOrEmpty(reportJson))
+            return BadRequest("Report data is required");
+        var entity = System.Text.Json.JsonSerializer.Deserialize<ReportDto>(reportJson,
+            new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+        if (entity == null)
+            return BadRequest("Invalid report data");
+        var id = await _reportService.CreateAsync(entity, image);
         return Ok(id);
     }
 }
