@@ -1,121 +1,3 @@
-// import React from "react";
-// import "./Report.css";
-
-// const Report: React.FC = () => {
-//   return <></>;
-// };
-
-// export default Report;
-
-// import React, { useState } from "react";
-// import {
-//   TextField,
-//   Button,
-//   Card,
-//   CardContent,
-//   Typography,
-//   MenuItem,
-// } from "@mui/material";
-// import "./Report.css";
-
-// const incidentTypes = [
-//   {
-//     value: "Parcat pe spatiu verde/bordura",
-//     label: "Parcat pe spatiu verde/bordura",
-//   },
-//   { value: "Parcat in fata unei porti", label: "Parcat in fata unei porti" },
-//   { value: "Accident", label: "Accident" },
-//   { value: "Parcat pe sosea", label: "Parcat pe sosea" },
-//   { value: "other", label: "Other" },
-// ];
-
-// const Report: React.FC = () => {
-//   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-
-//   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = event.target.files?.[0];
-//     if (file) {
-//       setUploadedImage(URL.createObjectURL(file));
-//     }
-//   };
-
-//   return (
-//     <div className="report-container">
-//       <Card className="report-card">
-//         <CardContent>
-//           <Typography variant="h4" className="report-title">
-//             Report an Incident
-//           </Typography>
-
-//           {/* Incident Type */}
-//           <TextField
-//             select
-//             label="Incident Type"
-//             fullWidth
-//             className="report-field"
-//             defaultValue=""
-//           >
-//             {incidentTypes.map((type) => (
-//               <MenuItem key={type.value} value={type.value}>
-//                 {type.label}
-//               </MenuItem>
-//             ))}
-//           </TextField>
-
-//           {/* Location */}
-//           <TextField label="Location" fullWidth className="report-field" />
-
-//           {/* Vehicle Plate */}
-//           <TextField
-//             label="License Plate (optional)"
-//             fullWidth
-//             className="report-field"
-//           />
-
-//           {/* Upload Image */}
-//           <div className="upload-box">
-//             <input
-//               accept="image/*"
-//               type="file"
-//               id="fileUpload"
-//               hidden
-//               onChange={handleImageUpload}
-//             />
-//             <label htmlFor="fileUpload">
-//               <Button variant="outlined" component="span" fullWidth>
-//                 Upload Image
-//               </Button>
-//             </label>
-
-//             {uploadedImage && (
-//               <img
-//                 src={uploadedImage}
-//                 alt="preview"
-//                 className="image-preview"
-//               />
-//             )}
-//           </div>
-
-//           {/* Description */}
-//           <TextField
-//             label="Description"
-//             fullWidth
-//             multiline
-//             rows={4}
-//             className="report-field"
-//           />
-
-//           <Button variant="contained" color="primary" fullWidth>
-//             Submit Report
-//           </Button>
-//         </CardContent>
-//       </Card>
-//     </div>
-//   );
-// };
-
-// export default Report;
-
 import React, { useState } from "react";
 import {
   TextField,
@@ -155,7 +37,7 @@ const incidentTypes = [
   { value: "other", label: "Other" },
 ];
 
-const Report: React.FC = () => {
+const ReportComponent: React.FC = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [location, setLocation] = useState("");
   const [openMap, setOpenMap] = useState(false);
@@ -341,4 +223,4 @@ const Report: React.FC = () => {
   );
 };
 
-export default Report;
+export default ReportComponent;

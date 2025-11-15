@@ -5,6 +5,6 @@ export const defaultHeaders = {
 };
 
 export const AiPlaygroundApiClient = axios.create({
-    baseURL: "https://localhost:7091/api/",
+    baseURL: "http://localhost:5033/api/",
     headers: defaultHeaders,
 });
