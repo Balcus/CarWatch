@@ -1,9 +1,4 @@
-﻿
-using System;
-
-using System;
-using System.Collections.Generic;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 
 namespace Api.DataAccess.Exceptions;
@@ -31,7 +26,6 @@ public class GlobalExceptionMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exceptions)
     {
-        // Default status code
         int statusCode = 404;
 
         var errorResponse = new

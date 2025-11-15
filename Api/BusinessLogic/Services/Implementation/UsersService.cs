@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Api.DataAccess.Enums;
+using Api.DataAccess.Security;
 using Microsoft.AspNetCore.Identity;
 
 namespace Api.BusinessLogic.Services.Implementation;
@@ -78,9 +79,9 @@ public class UserService : IUserService
 
     private string GenerateJwtToken(string email,Role role)
     {
-        if(_configuration["scret"] == null ) throw new Exception("Can not create JWT");
+        if(_configuration["SecretKey"] == null ) throw new Exception("Can not create JWT");
         var securityKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_configuration["scret"]));
+            Encoding.UTF8.GetBytes(_configuration["SecretKey"]));
         
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

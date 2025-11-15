@@ -8,6 +8,7 @@ using Api.DataAccess.Abstractions;
 using Api.DataAccess.Entities;
 using Api.DataAccess.Exceptions;
 using Api.DataAccess.Repositories;
+using Api.DataAccess.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -45,11 +46,10 @@ builder.Services.AddAuthentication("Bearer")
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["scret"]))
+                Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]!))
         };
     });
 
-// Service Registration Section
 builder.Services.AddScoped<IRepository<Report, int>, BaseRepository<Report, int>>();
 builder.Services.AddScoped<ICrudService<ReportDto, int>, ReportService>();
 builder.Services.AddScoped<IRepository<User, int>, BaseRepository<User, int>>();
@@ -74,8 +74,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseHttpsRedirection();
-app.MapControllers();
+app.UseCors("AllowReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowReactApp");
+app.MapControllers();
 app.Run();
