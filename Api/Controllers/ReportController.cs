@@ -1,5 +1,6 @@
 using Api.BusinessLogic.Dto;
 using Api.BusinessLogic.Services.Abstraction;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -16,6 +17,7 @@ public class ReportController : Controller
     }
     
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAllAsync()
     {
         var  reports = await _reportService.GetAllAsync();
@@ -23,6 +25,7 @@ public class ReportController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateAsync([FromBody] ReportDto entity)
     {
         var id = await _reportService.CreateAsync(entity);

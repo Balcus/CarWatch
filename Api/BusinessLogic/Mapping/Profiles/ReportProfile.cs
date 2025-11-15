@@ -8,7 +8,9 @@ public class ReportProfile : Profile
 {
     public ReportProfile()
     {
+        
         CreateMap<Report, ReportDto>();
         CreateMap<ReportDto, Report>();
     }
 }
+
