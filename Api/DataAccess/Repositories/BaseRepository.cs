@@ -10,7 +10,7 @@ public class BaseRepository<TEntity, TId>(DatabaseContext context) : IRepository
     protected readonly DatabaseContext Context = context;
     
 
-    public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
+    public virtual async Task<IList<TEntity>> GetAllAsync()
     {
         try
         {
@@ -56,12 +56,13 @@ public class BaseRepository<TEntity, TId>(DatabaseContext context) : IRepository
         }
     }
 
-    public virtual async Task UpdateAsync(TEntity entity)
+    public virtual async Task<TId> UpdateAsync(TEntity entity)
     {
         try
         {
             Context.Set<TEntity>().Update(entity);
             await Context.SaveChangesAsync();
+            return entity.Id;
         }
         catch (DbUpdateException e)
         {
