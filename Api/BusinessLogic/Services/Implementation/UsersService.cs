@@ -8,18 +8,22 @@ namespace Api.BusinessLogic.Services.Implementation;
 
 public class UserService : IUserService
 {
-    private readonly HashingService _hashingService;
-    
     private readonly IRepository<User, int> _userRepository;
+    
+    private readonly IUserRepository _iUserRepository;
 
-    public UserService(IRepository<User, int> userRepository)
+    public UserService(IRepository<User, int> userRepository, IUserRepository iUserRepository)
     {
         _userRepository = userRepository;
+        _iUserRepository = iUserRepository;
     }
     
     public async Task<int> CreateUser(UserDto userDto)
     {
         string hashedPassword = HashingService.HashPassword(userDto.Password);
+        var existingUser = await _iUserRepository.GetByEmailAsync(userDto.Email);
+        if(existingUser != null) throw new Exception("Email already exists");
+        
         var id = await _userRepository.CreateAsync(new User()
         {
             Password = hashedPassword,

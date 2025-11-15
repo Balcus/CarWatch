@@ -3,6 +3,8 @@ using Api.BusinessLogic.Services.Implementation;
 using Api.DataAccess;
 using Api.DataAccess.Abstractions;
 using Api.DataAccess.Entities;
+using Api.DataAccess.Exceptions;
+using Api.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,7 @@ builder.AddNpgsqlDbContext<DatabaseContext>("appdb");
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IRepository<User, int>, BaseRepository<User, int>>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
@@ -30,6 +33,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.MapControllers();
 //app.UseHttpsRedirection();
