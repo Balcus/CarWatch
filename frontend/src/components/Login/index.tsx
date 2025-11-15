@@ -1,11 +1,5 @@
 import { useState, FC } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Paper,
-} from "@mui/material";
+import { Box, TextField, Button, Typography, Paper } from "@mui/material";
 import "./Login.css";
 
 const Login: FC = () => {
@@ -14,15 +8,48 @@ const Login: FC = () => {
     password: "",
   });
 
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+  const validateEmail = (email: string) => {
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(email);
+  };
+
+  const validate = () => {
+    let valid = true;
+    const newErrors = { email: "", password: "" };
+
+    if (!form.email) {
+      newErrors.email = "Email is required";
+      valid = false;
+    } else if (!validateEmail(form.email)) {
+      newErrors.email = "Invalid email format";
+      valid = false;
+    }
+
+    if (!form.password) {
+      newErrors.password = "Password is required";
+      valid = false;
+    } else if (form.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validate()) return;
     console.log("Login data:", form);
   };
 
@@ -41,12 +68,13 @@ const Login: FC = () => {
           <TextField
             label="Email Address"
             name="email"
-            type="email"
             required
             fullWidth
+            margin="normal"
             value={form.email}
             onChange={handleChange}
-            margin="normal"
+            error={Boolean(errors.email)}
+            helperText={errors.email}
           />
 
           <TextField
@@ -55,9 +83,11 @@ const Login: FC = () => {
             type="password"
             required
             fullWidth
+            margin="normal"
             value={form.password}
             onChange={handleChange}
-            margin="normal"
+            error={Boolean(errors.password)}
+            helperText={errors.password}
           />
 
           <Button
@@ -67,7 +97,7 @@ const Login: FC = () => {
             size="large"
             className="login-button"
           >
-            Login
+            🚗 Login
           </Button>
 
           <Typography className="register-text">
