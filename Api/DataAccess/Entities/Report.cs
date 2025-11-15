@@ -1,6 +1,6 @@
 namespace Api.DataAccess.Entities;
 
-public class Entitiy
+public class Report
 {
     
 }
