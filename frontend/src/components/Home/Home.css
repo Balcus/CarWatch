@@ -67,7 +67,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  background-image: url("../../timisoara.jpg"); /* imagine de fundal */
+  background-image: url("../../../public/timisoara.jpg"); /* imagine de fundal */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
