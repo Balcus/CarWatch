@@ -33,12 +33,13 @@ public class BaseRepository<TEntity, TId>(DatabaseContext context) : IRepository
         }
     }
 
-    public virtual async Task CreateAsync(TEntity entity)
+    public virtual async Task<TId> CreateAsync(TEntity entity)
     {
         try
         {
             Context.Set<TEntity>().Add(entity);
             await Context.SaveChangesAsync();
+            return entity.Id;
         }
         catch (DbUpdateException e)
         {
@@ -54,12 +55,13 @@ public class BaseRepository<TEntity, TId>(DatabaseContext context) : IRepository
         }
     }
 
-    public virtual async Task UpdateAsync(TEntity entity)
+    public virtual async Task<TId> UpdateAsync(TEntity entity)
     {
         try
         {
             Context.Set<TEntity>().Update(entity);
             await Context.SaveChangesAsync();
+            return entity.Id;
         }
         catch (DbUpdateException e)
         {
