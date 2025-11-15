@@ -16,6 +16,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<DatabaseContext>("appdb");
 builder.Services.AddOpenApi();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
 
 // Service Registration Section
 builder.Services.AddScoped<IRepository<Report, int>, BaseRepository<Report, int>>();
@@ -38,5 +49,5 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
-app.UseCors("AllowAnyOrigin");
+app.UseCors("AllowReactApp");
 app.Run();
