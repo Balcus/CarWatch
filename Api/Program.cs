@@ -1,4 +1,5 @@
 using System.Text;
+
 using Api.BusinessLogic.Dto;
 using Api.BusinessLogic.Services.Abstraction;
 using Api.BusinessLogic.Services.Implementation;
@@ -7,7 +8,6 @@ using Api.DataAccess.Abstractions;
 using Api.DataAccess.Entities;
 using Api.DataAccess.Exceptions;
 using Api.DataAccess.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -21,6 +21,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<DatabaseContext>("appdb");
 builder.Services.AddOpenApi();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
@@ -60,10 +71,11 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-app.MapControllers();
-app.UseMiddleware<GlobalExceptionMiddleware>();
-//app.UseHttpsRedirection();
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseHttpsRedirection();
+app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors("AllowReactApp");
 app.Run();
