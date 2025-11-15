@@ -1,38 +1,47 @@
 import React from "react";
 import "./Home.css";
-import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { Box, Button } from "@mui/material";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-
+  
   const handleUploadClick = () => {
-    const isLoggedIn = localStorage.getItem("auth"); // verifică login
-
+    const isLoggedIn = localStorage.getItem("auth");
     if (!isLoggedIn) {
-      navigate("/login"); // redirect dacă nu e logat
+      navigate("/login");
     } else {
-      navigate("/report"); // merge la report dacă e logat
+      navigate("/report");
     }
   };
 
   return (
-    <div className="layout">
-      <main className="content">
-        <div className="overlay">
-          <h1>Bine ai venit pe pagina noastră</h1>
-          <p>Încarcă să ajutăm comunitatea</p>
-
-          <Button
-            variant="contained"
-            onClick={handleUploadClick}
-            className="uploadBtn"
-          >
-            Încarcă o poză 🚗
-          </Button>
-        </div>
-      </main>
-    </div>
+    <>
+      <Box className="home-page">
+        <Box className="content-center">
+          <Box className="left-image">
+            <img 
+              src="/police-man.png" 
+              alt="Illegally parked vehicle" 
+            />
+          </Box>
+          <Box className="right-content">
+            <Box className="text-up">
+              <h1>Help Keep Our Streets Clear</h1>
+              <p>
+                Join our community in making parking fair for everyone. 
+                Report illegally parked vehicles quickly and easily. 
+                Together, we can ensure accessible streets and reduce 
+                traffic congestion caused by improper parking.
+              </p>
+            </Box>
+            <Button onClick={handleUploadClick} disableRipple>
+              Report Vehicle
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 
