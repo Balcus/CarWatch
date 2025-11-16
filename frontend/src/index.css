@@ -1,0 +1,14 @@
+:root {
+    --primary-color-light: #F8F4EC;
+    --contrast-color: #84994F;
+    --font: sans-serif;
+}
+
+body {
+    font-family: var(--font);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}

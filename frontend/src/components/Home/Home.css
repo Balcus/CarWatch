@@ -1,0 +1,132 @@
+:root {
+  /* Colors */
+  --primary-color: #d61f3ed5;
+  --bg-color: #fff;
+  --text-dark: #2d3748;
+  --text-light: #4a5568;
+  
+  /* Spacing */
+  --spacing-lg: 60px;
+  --spacing-md: 40px;
+  --spacing-sm: 20px;
+  
+  /* Other */
+  --border-radius: 20px;
+  --max-width: 1200px;
+}
+
+.home-page {
+  height: calc(100vh - 120px);
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-sm);
+  background: var(--bg-color);
+}
+
+.content-center {
+  margin-top: 5rem;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  max-width: var(--max-width);
+  background: white;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+}
+
+.left-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-image img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.left-image:empty::before {
+  content: '';
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  height: 400px;
+  background: var(--primary-color);
+  border-radius: 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 150px;
+}
+
+.right-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.text-up h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 var(--spacing-sm) 0;
+  line-height: 1.2;
+}
+
+.text-up p {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.right-content button {
+  padding: 16px 40px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: none;
+  border-radius: 8px;
+  background: var(--primary-color);
+  color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.right-content button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+@media (max-width: 968px) {
+  .content-center {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+
+  .text-up h1 {
+    font-size: 2.5rem;
+  }
+
+  .text-up p {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .content-center {
+    padding: 30px var(--spacing-sm);
+  }
+
+  .text-up h1 {
+    font-size: 2rem;
+  }
+
+  .text-up p {
+    font-size: 1rem;
+  }
+}

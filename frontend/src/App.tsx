@@ -1,10 +1,14 @@
-import './App.css';
-import { Outlet } from 'react-router';
+import "./App.css";
+import { Outlet } from "react-router";
+import Footer from "./components/Footer";
+import Nav from "./components/Nav";
 
 function App() {
   return (
     <>
-      <Outlet />
+        <Nav />
+        <Outlet />
+        {/* <Footer /> */}
     </>
   );
 }

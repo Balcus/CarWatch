@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Api.BusinessLogic.Services.Implementation;
+﻿namespace Api.DataAccess.Security;
 
 public class HashingServiceImpl
 {

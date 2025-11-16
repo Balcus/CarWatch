@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Api.DataAccess.Configuration;
 using Api.DataAccess.Enums;
+using Api.DataAccess.Security;
 
 namespace Api.BusinessLogic.Services.Implementation;
 
@@ -41,7 +42,7 @@ public class UserService : IUserService
         var user = _mapper.Map<User>(userDto);
         var existingUser = await _iUserRepository.GetByEmailAsync(userDto.Mail);
         if(existingUser != null) throw new Exception("Email already exists");
-        await _emailProducer.EmailRegistration(userDto.Mail);
+        
         var id = await _userRepository.CreateAsync(user); 
         return id;
     }
@@ -90,16 +91,16 @@ public class UserService : IUserService
 
     private string GenerateJwtToken(string email,Role role)
     {
-        if(_configuration["scret"] == null ) throw new Exception("Can not create JWT");
+        if(_configuration["SecretKey"] == null ) throw new Exception("Can not create JWT");
         var securityKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_configuration["scret"]));
+            Encoding.UTF8.GetBytes(_configuration["SecretKey"]));
         
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, email), // Your 'as' claim
-            new Claim(ClaimTypes.Role, role.ToString()),
+            new Claim("as", email), // Your 'as' claim
+            new Claim("role",role.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, email),
             new Claim(JwtRegisteredClaimNames.Aud, _configuration["Jwt:Audience"]),
             new Claim(JwtRegisteredClaimNames.Iss, _configuration["Jwt:Issuer"]),
