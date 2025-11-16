@@ -23,7 +23,8 @@ public class User : IEntityBase<int>
     public string Password { get; set; }
 
     public Role Role { get; set; } = Role.Default;
-    
+
+    public Boolean Active { get; set; } = false;
     
     public List<Report> Reports { get; set; } = new();
     

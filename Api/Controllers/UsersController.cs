@@ -26,6 +26,15 @@ public class UsersController: ControllerBase
         return Created(id.ToString(), userDto);
     }
 
+    [HttpPut]
+    [Route("activate")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ActivateUserAccount([FromQuery(Name = "mail")]string mail)
+    {
+        var id = await _UserService.ActivateUserAccount(mail);
+        return Ok(id);
+    }
+
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)

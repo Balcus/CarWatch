@@ -5,6 +5,7 @@ using Api.BusinessLogic.Services.Abstraction;
 using Api.BusinessLogic.Services.Implementation;
 using Api.DataAccess;
 using Api.DataAccess.Abstractions;
+using Api.DataAccess.Configuration;
 using Api.DataAccess.Entities;
 using Api.DataAccess.Exceptions;
 using Api.DataAccess.Repositories;
@@ -46,16 +47,21 @@ builder.Services.AddAuthentication("Bearer")
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]!))
+                Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]))
         };
     });
 
+// Service Registration Section
 builder.Services.AddScoped<IRepository<Report, int>, BaseRepository<Report, int>>();
 builder.Services.AddScoped<ICrudService<ReportDto, int>, ReportService>();
 builder.Services.AddScoped<IRepository<User, int>, BaseRepository<User, int>>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<HashingServiceImpl>();
+builder.Services.AddHostedService<EmailConsumer>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<EmailProducer>();
+
 
 var app = builder.Build();
 
@@ -74,8 +80,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseHttpsRedirection();
-app.UseCors("AllowReactApp");
+app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+app.UseCors("AllowReactApp");
 app.Run();

@@ -99,6 +99,9 @@ namespace Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Mail")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -124,6 +127,7 @@ namespace Api.Migrations
                         new
                         {
                             Id = 1,
+                            Active = false,
                             Mail = "john.doe@example.com",
                             Name = "John Doe",
                             Password = "hashed_password_123",
@@ -132,6 +136,7 @@ namespace Api.Migrations
                         new
                         {
                             Id = 2,
+                            Active = false,
                             Mail = "jane.smith@example.com",
                             Name = "Jane Smith",
                             Password = "hashed_password_456",
@@ -140,6 +145,7 @@ namespace Api.Migrations
                         new
                         {
                             Id = 4,
+                            Active = false,
                             Mail = "mike.johnson@example.com",
                             Name = "Mike Johnson",
                             Password = "hashed_password_101",

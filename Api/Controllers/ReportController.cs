@@ -30,7 +30,7 @@ public class ReportController : Controller
     {
         if (string.IsNullOrEmpty(reportJson))
             return BadRequest("Report data is required");
-        var entity = System.Text.Json.JsonSerializer.Deserialize<ReportDto>(reportJson,
+            var entity = System.Text.Json.JsonSerializer.Deserialize<ReportDto>(reportJson,
             new System.Text.Json.JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true

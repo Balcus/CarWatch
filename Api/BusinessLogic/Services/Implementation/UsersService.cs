@@ -7,9 +7,9 @@ using Api.DataAccess.Entities;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Api.DataAccess.Configuration;
 using Api.DataAccess.Enums;
 using Api.DataAccess.Security;
-using Microsoft.AspNetCore.Identity;
 
 namespace Api.BusinessLogic.Services.Implementation;
 
@@ -23,14 +23,16 @@ public class UserService : IUserService
     
     private readonly IConfiguration _configuration;
     private readonly HashingServiceImpl _hasher;
+    private readonly EmailProducer _emailProducer;
 
-    public UserService(IRepository<User, int> userRepository, IUserRepository iUserRepository, IMapper mapper, IConfiguration configuration, HashingServiceImpl hasher)
+    public UserService(IRepository<User, int> userRepository, IUserRepository iUserRepository, IMapper mapper, IConfiguration configuration, HashingServiceImpl hasher, EmailProducer emailProducer)
     {
         _configuration = configuration;
         _userRepository = userRepository;
         _iUserRepository = iUserRepository;
         _mapper = mapper;
         _hasher = hasher;
+        _emailProducer = emailProducer;
     }
     
     public async Task<int> CreateUser(UserDto userDto)
@@ -77,6 +79,16 @@ public class UserService : IUserService
         };
     }
 
+    public async Task<int> ActivateUserAccount(string email)
+    {
+        var user = await _iUserRepository.GetByEmailAsync(email);
+        if(user == null) throw new Exception("User does not exist");
+        user.Active = true;
+        
+        await _emailProducer.EmailActivation(email);
+        return await _iUserRepository.UpdateAsync(user);
+    }
+
     private string GenerateJwtToken(string email,Role role)
     {
         if(_configuration["SecretKey"] == null ) throw new Exception("Can not create JWT");
@@ -95,8 +107,8 @@ public class UserService : IUserService
         };
 
         var token = new JwtSecurityToken(
-            issuer: _configuration["Issuer"],
-            audience: _configuration["Audience"],
+            issuer:  _configuration["Jwt:Issuer"],
+            audience:  _configuration["Jwt:Audience"],
             claims: claims,
             expires: DateTime.UtcNow.AddHours(24),
             signingCredentials: credentials

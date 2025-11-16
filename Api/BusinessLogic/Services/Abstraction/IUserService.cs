@@ -9,4 +9,5 @@ public interface IUserService
     Task<List<UserDtoResponse>> GetUsers();
     
     Task<LoginResponse> LoginUser(LoginRequest loginRequest);
+    Task<int> ActivateUserAccount(string email);
 }
