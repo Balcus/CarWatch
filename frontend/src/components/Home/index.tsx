@@ -1,27 +1,3 @@
-/*
-import React from "react";
-import Header from "../Header";
-import Footer from "../Footer";
-import "./Home.css";
-
-const Home: React.FC = () => {
-  return (
-    <>
-      <main className="homeContainer">
-        <h1 className="homeTitle">Bine ai venit pe pagina noastră</h1>
-
-        <p className="homeSubtitle">Încarcă să ajutăm comunitatea</p>
-
-        <button className="uploadBtn">Încarcă o poză</button>
-      </main>
-    </>
-  );
-};
-
-export default Home;
-*/
-
-import React from "react";
 import "./Home.css";
 
 const Home = () => {
