@@ -7,6 +7,7 @@ using Api.DataAccess.Entities;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Api.DataAccess.Configuration;
 using Api.DataAccess.Enums;
 using Microsoft.AspNetCore.Identity;
 
@@ -22,14 +23,16 @@ public class UserService : IUserService
     
     private readonly IConfiguration _configuration;
     private readonly HashingServiceImpl _hasher;
+    private readonly EmailProducer _emailProducer;
 
-    public UserService(IRepository<User, int> userRepository, IUserRepository iUserRepository, IMapper mapper, IConfiguration configuration, HashingServiceImpl hasher)
+    public UserService(IRepository<User, int> userRepository, IUserRepository iUserRepository, IMapper mapper, IConfiguration configuration, HashingServiceImpl hasher, EmailProducer emailProducer)
     {
         _configuration = configuration;
         _userRepository = userRepository;
         _iUserRepository = iUserRepository;
         _mapper = mapper;
         _hasher = hasher;
+        _emailProducer = emailProducer;
     }
     
     public async Task<int> CreateUser(UserDto userDto)
@@ -41,6 +44,8 @@ public class UserService : IUserService
         if(existingUser != null) throw new Exception("Email already exists");
         
         var id = await _userRepository.CreateAsync(user); 
+        
+        await _emailProducer.PublishEmail(userDto.Mail);
         return id;
     }
 
