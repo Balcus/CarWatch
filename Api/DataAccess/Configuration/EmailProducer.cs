@@ -9,7 +9,8 @@ public class EmailProducer
     private int port;
     private string username;
     private string password;
-    private string queue;
+    private string registrationQueue;
+    private string activationQueue;
 
     public EmailProducer(IConfiguration config)
     {
@@ -17,11 +18,25 @@ public class EmailProducer
         port = int.Parse(config["RabbitMq:Port"]);
         username = config["RabbitMq:Username"];
         password = config["RabbitMq:Password"];
-        queue = config["RabbitMq:Queue"];
+        registrationQueue = config["RabbitMq:RegistrationQueue"];
+        activationQueue  = config["RabbitMq:ActivationQueue"];
         Console.WriteLine("Sunt in producer");
     }
 
-    public async Task PublishEmail(string email)
+    public async Task EmailRegistration(string email)
+    {
+        string queueName = registrationQueue;
+        await PublishToQueue(email, queueName);
+
+    }
+    
+    public async Task EmailActivation(string email)
+    {
+        string queueName = activationQueue;
+        await PublishToQueue(email, queueName);
+    }
+    
+    private async Task PublishToQueue(string message, string queueName)
     {
         var factory = new ConnectionFactory
         {
@@ -31,19 +46,16 @@ public class EmailProducer
             Password = password
         };
 
-        IConnection conn = await factory.CreateConnectionAsync();
-        IChannel channel = await conn.CreateChannelAsync();
-        // string exchangeName = "exchange-email";
-        // string routingKey = "routing-key";
-        // await channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Direct);
-        await channel.QueueDeclareAsync(queue: queue,
+        await using IConnection conn = await factory.CreateConnectionAsync();
+        await using IChannel channel = await conn.CreateChannelAsync();
+
+        await channel.QueueDeclareAsync(queue: registrationQueue,
             durable: true,
             exclusive: false,
             autoDelete: false);
 
-        byte[] messageBodyBytes = System.Text.Encoding.UTF8.GetBytes(email);
+        byte[] messageBodyBytes = System.Text.Encoding.UTF8.GetBytes(message);
         var props = new BasicProperties();
-        await channel.BasicPublishAsync(exchange: string.Empty, routingKey: "emailQueue", false, props, messageBodyBytes);
-
+        await channel.BasicPublishAsync(exchange: string.Empty, routingKey: queueName, false, props, messageBodyBytes);
     }
 }

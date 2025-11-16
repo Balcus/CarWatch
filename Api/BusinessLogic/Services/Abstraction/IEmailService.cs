@@ -2,5 +2,7 @@
 
 public interface IEmailService
 {
-    Task SendEmailAsync(string toEmail);
+    Task SendEmailRegistrationAsync(string toEmail);
+
+    Task SendEmailActivationAsync(string toEmail);
 }
