@@ -47,7 +47,7 @@ builder.Services.AddAuthentication("Bearer")
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]))
+                Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]!))
         };
     });
 
@@ -57,10 +57,13 @@ builder.Services.AddScoped<ICrudService<ReportDto, int>, ReportService>();
 builder.Services.AddScoped<IRepository<User, int>, BaseRepository<User, int>>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IReportRepository, ReportRepositoy>();
 builder.Services.AddScoped<HashingServiceImpl>();
 builder.Services.AddHostedService<EmailConsumer>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<EmailProducer>();
+builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();
