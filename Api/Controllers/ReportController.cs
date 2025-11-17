@@ -10,17 +10,27 @@ namespace Api.Controllers;
 public class ReportController : Controller
 {
     private readonly ICrudService<ReportDto, int> _reportService;
+    private readonly IReportService _reportService2;
 
-    public ReportController(ICrudService<ReportDto, int> reportService)
+    public ReportController(ICrudService<ReportDto, int> reportService,  IReportService reportService2)
     {
         _reportService = reportService;
+        _reportService2 = reportService2;
     }
     
     [HttpGet]
     [Authorize]
     public async Task<IActionResult> GetAllAsync()
     {
-        var  reports = await _reportService.GetAllAsync();
+        var reports = await _reportService.GetAllAsync();
+        return Ok(reports);
+    }
+
+    [HttpGet("byUserId")]
+    [Authorize]
+    public async Task<IActionResult> GetByIdAsync(int userId)
+    {
+        var reports = await _reportService2.GetAllByUserIdAsync();
         return Ok(reports);
     }
 

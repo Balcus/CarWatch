@@ -6,18 +6,31 @@ using Api.BusinessLogic.Services.Abstraction;
 using Api.DataAccess.Abstractions;
 using Api.DataAccess.Entities;
 using AutoMapper;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Api.BusinessLogic.Services.Implementation;
 
-public class ReportService : ICrudService<ReportDto, int>
+public class ReportService : ICrudService<ReportDto, int>, IReportService
 {
     private readonly IRepository<Report, int> _repository;
+    private readonly IUserRepository _userRepository;
+    private readonly IReportRepository _reportRepository;
     private readonly IMapper _mapper;
     private readonly IAmazonS3 _s3Client;
     private readonly string _bucketName;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ReportService(IRepository<Report, int> repository, IMapper mapper, IConfiguration config)
+    public ReportService(IRepository<Report, int> repository,
+        IMapper mapper, 
+        IConfiguration config, 
+        IHttpContextAccessor httpContextAccessor,
+        IUserRepository userRepository,
+        IReportRepository reportRepository
+        )
     {
+        _httpContextAccessor = httpContextAccessor;
+        _userRepository = userRepository;
+        _reportRepository = reportRepository;
         _repository = repository;
         _mapper = mapper;
         _bucketName = config["AWS:BucketName"];
@@ -26,6 +39,7 @@ public class ReportService : ICrudService<ReportDto, int>
             config["AWS:SecretKey"],
             RegionEndpoint.GetBySystemName(config["AWS:Region"])
         );
+        
     }
     
     public async Task<List<ReportDto>> GetAllAsync()
@@ -42,6 +56,31 @@ public class ReportService : ICrudService<ReportDto, int>
     public async Task<int> CreateAsync(ReportDto entity)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<List<ReportResponseDto>> GetAllByUserIdAsync()
+    {
+        var email = _httpContextAccessor.HttpContext?.User.FindFirst("as")?.Value;
+        if (email == null)
+            throw new UnauthorizedAccessException("Email not found in JWT");
+        var user = await _userRepository.GetByEmailAsync(email);
+        if (user == null) 
+            throw new UnauthorizedAccessException("User not found in JWT");
+        List<Report> reports = await _reportRepository.GetAllAsyncByUserId(user.Id);
+        List<ReportResponseDto> returnReports = new List<ReportResponseDto>();
+        
+        foreach (var report in reports)
+        {
+            returnReports.Add(new ReportResponseDto
+            {
+               Latitude = report.Latitude,
+               Longitude = report.Longitude,
+               Description = report.Description,
+               UserId = report.UserId,
+               Status = report.Status.ToString()
+            });
+        }
+       return returnReports;
     }
 
     public async Task<int> CreateAsync(ReportDto entity, IFormFile image)
@@ -68,7 +107,6 @@ public class ReportService : ICrudService<ReportDto, int>
             UserId = entity.UserId
         };
         
-        //var report = _mapper.Map<Report>(entity);
         return await _repository.CreateAsync(report);
     }
 
