@@ -38,11 +38,13 @@ public class UserService : IUserService
     public async Task<int> CreateUser(UserDto userDto)
     {
         string hashedPassword = _hasher.HashPassword(userDto.Password);
+        string hashedCnp = _hasher.HashPassword(userDto.CNP);
         userDto.Password = hashedPassword;
+        userDto.CNP = hashedCnp;
         var user = _mapper.Map<User>(userDto);
         var existingUser = await _iUserRepository.GetByEmailAsync(userDto.Mail);
         if(existingUser != null) throw new Exception("Email already exists");
-        
+        await _emailProducer.EmailRegistration(userDto.Mail);
         var id = await _userRepository.CreateAsync(user); 
         return id;
     }
@@ -68,10 +70,10 @@ public class UserService : IUserService
         bool result = _hasher.VerifyPassword(existingUser.Password, loginRequest.Password);
 
         if(!result) throw new Exception("Password is incorrect");
-
-        User user = await _iUserRepository.GetByEmailAsync(loginRequest.Mail);
         
-        var token = GenerateJwtToken(loginRequest.Mail, user.Role);
+        if(!existingUser.Active) throw new Exception("Account is not active");
+        
+        var token = GenerateJwtToken(loginRequest.Mail, existingUser.Role);
 
         return new LoginResponse
         {

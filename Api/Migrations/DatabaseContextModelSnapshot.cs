@@ -102,6 +102,10 @@ namespace Api.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("CNP")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Mail")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -128,6 +132,7 @@ namespace Api.Migrations
                         {
                             Id = 1,
                             Active = false,
+                            CNP = "12345678",
                             Mail = "john.doe@example.com",
                             Name = "John Doe",
                             Password = "hashed_password_123",
@@ -137,6 +142,7 @@ namespace Api.Migrations
                         {
                             Id = 2,
                             Active = false,
+                            CNP = "12345678",
                             Mail = "jane.smith@example.com",
                             Name = "Jane Smith",
                             Password = "hashed_password_456",
@@ -146,6 +152,7 @@ namespace Api.Migrations
                         {
                             Id = 4,
                             Active = false,
+                            CNP = "12345678",
                             Mail = "mike.johnson@example.com",
                             Name = "Mike Johnson",
                             Password = "hashed_password_101",

@@ -13,6 +13,7 @@ public class User : IEntityBase<int>
     
     public string Name { get; set; }
     
+    public string CNP { get; set; }
     
     [Required]
     [EmailAddress(ErrorMessage = "Invalid email address format")]
@@ -24,7 +25,7 @@ public class User : IEntityBase<int>
 
     public Role Role { get; set; } = Role.Default;
 
-    public Boolean Active { get; set; } = false;
+    public bool Active { get; set; }
     
     public List<Report> Reports { get; set; } = new();
     

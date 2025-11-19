@@ -23,7 +23,7 @@ public class UsersController: ControllerBase
     public async Task<IActionResult> AuthenticateUse([FromBody] UserDto userDto)
     {
         var id = await _UserService.CreateUser(userDto);
-        return Created(id.ToString(), userDto);
+        return Ok(id);
     }
 
     [HttpPut]
