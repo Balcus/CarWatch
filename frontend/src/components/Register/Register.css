@@ -1,3 +1,19 @@
+.toast-snackbar .MuiPaper-root {
+  min-width: 350px !important;
+  border-radius: 12px;
+}
+
+/* Makes the Alert itself bigger */
+.toast-alert {
+  font-size: 1.2rem !important; /* bigger text */
+  padding: 16px 10px !important; /* more padding */
+}
+
+/* Makes the Alert icon bigger */
+.toast-alert .MuiAlert-icon {
+  font-size: 2rem !important;
+}
+
 .register-page {
   height: 100vh;
   background: #f0f2f5;
@@ -11,7 +27,7 @@
   padding: 40px;
   border-radius: 16px;
   background: white;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .register-title {
@@ -37,7 +53,6 @@
 .register-button:hover {
   background-color: #000000 !important;
 }
-
 
 .register-divider {
   height: 12px;

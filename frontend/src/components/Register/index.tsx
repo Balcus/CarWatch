@@ -7,6 +7,8 @@ import {
   Paper,
   IconButton,
   InputAdornment,
+  Alert,
+  Snackbar,
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -145,21 +147,36 @@ export const Register: FC = () => {
   return (
     <Box className="register-page">
       <Paper elevation={3} className="register-card">
+        <Snackbar
+          open={Boolean(serverError)}
+          autoHideDuration={3000}
+          onClose={() => setServerError('')}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          className="toast-snackbar">
+          <Alert
+            severity="error"
+            onClose={() => setServerError('')}
+            className="toast-alert">
+            {serverError}
+          </Alert>
+        </Snackbar>
+
+        <Snackbar
+          open={Boolean(success)}
+          autoHideDuration={3000}
+          onClose={() => setSuccess('')}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          className="toast-snackbar">
+          <Alert
+            severity="success"
+            onClose={() => setSuccess('')}
+            className="toast-alert">
+            {success}
+          </Alert>
+        </Snackbar>
         <Typography className="register-title" component="h1" variant="h4">
           Register
         </Typography>
-
-        {serverError && (
-          <Typography color="error" sx={{ mt: 1 }}>
-            {serverError}
-          </Typography>
-        )}
-
-        {success && (
-          <Typography color="primary" sx={{ mt: 1 }}>
-            {success}
-          </Typography>
-        )}
 
         <form className="register-form" onSubmit={handleSubmit}>
           <TextField

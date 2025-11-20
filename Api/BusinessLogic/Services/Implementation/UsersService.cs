@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Api.DataAccess.Configuration;
 using Api.DataAccess.Enums;
 using Api.DataAccess.Security;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Api.BusinessLogic.Services.Implementation;
 
@@ -37,6 +38,7 @@ public class UserService : IUserService
     
     public async Task<int> CreateUser(UserDto userDto)
     {
+        
         string hashedPassword = _hasher.HashPassword(userDto.Password);
         string hashedCnp = _hasher.HashPassword(userDto.CNP);
         userDto.Password = hashedPassword;

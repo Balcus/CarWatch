@@ -11,8 +11,10 @@ public class User : IEntityBase<int>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     
+    [Required(ErrorMessage = "Name is required")]
     public string Name { get; set; }
     
+    [Required]
     public string CNP { get; set; }
     
     [Required]
