@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState } from 'react';
 import {
   Box,
   TextField,
@@ -7,30 +7,35 @@ import {
   Paper,
   IconButton,
   InputAdornment,
-} from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+} from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-import "./Register.css";
+import './Register.css';
+import { UserDto } from '../../models/UserDto';
+import { AuthApiClient } from '../../clients/AuthApiClient';
+import { ErrorResponse } from '../../models/ErrorResponse';
 
 export const Register: FC = () => {
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    cnp: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    cnp: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [serverError, setServerError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    cnp: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    cnp: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const validateEmail = (email: string) =>
@@ -39,41 +44,41 @@ export const Register: FC = () => {
   const validate = () => {
     let valid = true;
     const newErrors = {
-      name: "",
-      email: "",
-      cnp: "",
-      password: "",
-      confirmPassword: "",
+      name: '',
+      email: '',
+      cnp: '',
+      password: '',
+      confirmPassword: '',
     };
 
     if (!form.name.trim()) {
-      newErrors.name = "Name is required";
+      newErrors.name = 'Name is required';
       valid = false;
     }
 
     if (!form.email || !validateEmail(form.email)) {
-      newErrors.email = "Invalid email format";
+      newErrors.email = 'Invalid email format';
       valid = false;
     }
 
     if (!form.cnp) {
-      newErrors.cnp = "CNP is required";
+      newErrors.cnp = 'CNP is required';
       valid = false;
     } else if (!/^\d{13}$/.test(form.cnp)) {
-      newErrors.cnp = "CNP must contain exactly 13 digits";
+      newErrors.cnp = 'CNP must contain exactly 13 digits';
       valid = false;
     }
 
     if (!form.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = 'Password is required';
       valid = false;
     } else if (form.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+      newErrors.password = 'Password must be at least 6 characters';
       valid = false;
     }
 
     if (form.confirmPassword !== form.password) {
-      newErrors.confirmPassword = "Passwords do not match";
+      newErrors.confirmPassword = 'Passwords do not match';
       valid = false;
     }
 
@@ -85,7 +90,7 @@ export const Register: FC = () => {
     const { name, value } = e.target;
 
     // 🔥 Restricție numerică strictă pentru CNP
-    if (name === "cnp") {
+    if (name === 'cnp') {
       if (/^\d*$/.test(value) && value.length <= 13) {
         setForm({ ...form, cnp: value });
       }
@@ -93,14 +98,38 @@ export const Register: FC = () => {
     }
 
     setForm({ ...form, [name]: value });
-    setErrors({ ...errors, [name]: "" });
+    setErrors({ ...errors, [name]: '' });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
-    console.log("Register data:", form);
+    setServerError('');
+    setSuccess('');
+
+    const userDto: UserDto = {
+      name: form.name,
+      mail: form.email,
+      password: form.password,
+      CNP: form.cnp,
+    };
+
+    AuthApiClient.authenticateUser(userDto)
+      .then((id) => {
+        setSuccess('A confirmation email was sent to your email address');
+        // Optional: reset form here
+        setForm({
+          name: '',
+          email: '',
+          cnp: '',
+          password: '',
+          confirmPassword: '',
+        });
+      })
+      .catch((err: ErrorResponse) => {
+        setServerError(err.message || 'An unexpected error occurred');
+      });
   };
 
   return (
@@ -110,6 +139,17 @@ export const Register: FC = () => {
           Register
         </Typography>
 
+        {serverError && (
+          <Typography color="error" sx={{ mt: 1 }}>
+            {serverError}
+          </Typography>
+        )}
+
+        {success && (
+          <Typography color="primary" sx={{ mt: 1 }}>
+            {success}
+          </Typography>
+        )}
         <form className="register-form" onSubmit={handleSubmit}>
           <TextField
             label="Name"
@@ -151,7 +191,7 @@ export const Register: FC = () => {
           <TextField
             label="Password"
             name="password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             fullWidth
             margin="normal"
             value={form.password}
@@ -172,7 +212,7 @@ export const Register: FC = () => {
           <TextField
             label="Confirm Password"
             name="confirmPassword"
-            type={showConfirmPassword ? "text" : "password"}
+            type={showConfirmPassword ? 'text' : 'password'}
             fullWidth
             margin="normal"
             value={form.confirmPassword}
@@ -183,8 +223,9 @@ export const Register: FC = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
+                    onClick={() =>
+                      setShowConfirmPassword(!showConfirmPassword)
+                    }>
                     {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
@@ -196,8 +237,7 @@ export const Register: FC = () => {
             type="submit"
             variant="contained"
             fullWidth
-            className="register-button"
-          >
+            className="register-button">
             🚗 Register
           </Button>
         </form>

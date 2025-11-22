@@ -11,8 +11,11 @@ public class User : IEntityBase<int>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     
+    [Required(ErrorMessage = "Name is required")]
     public string Name { get; set; }
     
+    [Required]
+    public string CNP { get; set; }
     
     [Required]
     [EmailAddress(ErrorMessage = "Invalid email address format")]
@@ -24,7 +27,7 @@ public class User : IEntityBase<int>
 
     public Role Role { get; set; } = Role.Default;
 
-    public Boolean Active { get; set; } = false;
+    public bool Active { get; set; }
     
     public List<Report> Reports { get; set; } = new();
     

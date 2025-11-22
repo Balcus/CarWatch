@@ -18,7 +18,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 Name = "John Doe",
                 Mail = "john.doe@example.com",
                 Password = "hashed_password_123",
-                Role = Role.Default
+                Role = Role.Default,
+                CNP = "12345678",
             },
             new User
             {
@@ -26,7 +27,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 Name = "Jane Smith",
                 Mail = "jane.smith@example.com",
                 Password = "hashed_password_456",
-                Role = Role.Default
+                Role = Role.Default,
+                CNP = "12345678",
             },
             new User
             {
@@ -34,7 +36,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 Name = "Mike Johnson",
                 Mail = "mike.johnson@example.com",
                 Password = "hashed_password_101",
-                Role = Role.Default
+                Role = Role.Default,
+                CNP = "12345678",
             }
         );
     }

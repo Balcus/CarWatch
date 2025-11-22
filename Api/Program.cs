@@ -10,6 +10,7 @@ using Api.DataAccess.Entities;
 using Api.DataAccess.Exceptions;
 using Api.DataAccess.Repositories;
 using Api.DataAccess.Security;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -19,6 +20,32 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        // Extract ALL validation error messages
+        var errorMessages = context.ModelState
+            .Where(m => m.Value.Errors.Count > 0)
+            .SelectMany(m => m.Value.Errors)
+            .Select(e => e.ErrorMessage)
+            .ToList();
+
+        // Or extract only the first error:
+        var message = errorMessages.FirstOrDefault() ?? "Validation error";
+
+        var errorResponse = new ErrorResponse
+        {
+            Message = message,
+            StatusCode = StatusCodes.Status400BadRequest,
+            Timestamp = DateTime.UtcNow
+        };
+
+        return new BadRequestObjectResult(errorResponse);
+    };
+});
+
 
 builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<DatabaseContext>("appdb");

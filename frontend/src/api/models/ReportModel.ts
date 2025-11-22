@@ -1,5 +1,5 @@
 
-export interface ReportModel  {
+export interface ReportModel {
     description?: string,
     latitude: number,
     longitude: number,

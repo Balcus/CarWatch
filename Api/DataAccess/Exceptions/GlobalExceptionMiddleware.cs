@@ -26,20 +26,19 @@ public class GlobalExceptionMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exceptions)
     {
-        int statusCode = 404;
-
+    
+        int statusCode = StatusCodes.Status400BadRequest;    
         var errorResponse = new
         {
-            exceptions.Message,
-            statusCode,
-            DateTime.UtcNow
+            Message = exceptions.Message,
+            StatusCode = statusCode,
+            Timestamp = DateTime.UtcNow
         };
-
-        string json = JsonSerializer.Serialize(errorResponse);
+        
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
 
-        return context.Response.WriteAsync(json);
+        return context.Response.WriteAsJsonAsync(errorResponse);
     }
 }
