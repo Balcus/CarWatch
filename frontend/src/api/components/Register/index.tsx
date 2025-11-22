@@ -128,7 +128,7 @@ export const Register: FC = () => {
         });
       })
       .catch((err: ErrorResponse) => {
-        setServerError(err.Message || 'An unexpected error occurred');
+        setServerError(err.message || 'An unexpected error occurred');
       });
   };
 

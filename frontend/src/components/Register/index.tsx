@@ -120,7 +120,7 @@ export const Register: FC = () => {
 
     AuthApiClient.authenticateUser(userDto)
       .then((id) => {
-        setSuccess('A confirmation email was sent!');
+        setSuccess('Your account was created! A confirmation email was sent!');
         setForm({
           name: '',
           email: '',
@@ -129,15 +129,16 @@ export const Register: FC = () => {
           confirmPassword: '',
         });
 
+        // Clear message after 3 seconds
         setTimeout(() => {
           setSuccess('');
         }, 3000);
       })
       .catch((err: ErrorResponse) => {
         console.log(err);
-        setServerError(err.Message!);
+        setServerError(err.message!);
 
-        // Clear error after 3 seconds
+        // Clear message after 3 seconds
         setTimeout(() => setServerError(''), 3000);
       });
 
